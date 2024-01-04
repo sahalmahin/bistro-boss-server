@@ -22,11 +22,19 @@ const client = new MongoClient(uri, {
 
 
 
+const userCollection = client.db('bistroDb').collection('users');
 const menuCollection = client.db('bistroDb').collection('menu');
 const reviewCollection = client.db('bistroDb').collection('reviews');
 const cartCollection = client.db('bistroDb').collection('carts');
 
 
+
+// users related api
+app.post('/users', async (req, res) => {
+    const user = req.body;
+    const result = await userCollection.insertOne(user);
+    res.send(result);
+})
 
 // menu api
 app.get('/menu', async (req, res) => {
@@ -59,7 +67,7 @@ app.delete('/carts/:id', async (req, res) => {
     const query = { _id: new ObjectId(id) }
     const result = await cartCollection.deleteOne(query);
     res.send(result);
-  })
+})
 
 
 async function run() {
